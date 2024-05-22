@@ -14,7 +14,7 @@
           <kendo-checkbox #checkedState [checkedState]="dataItem.isComplete" (click)="onChange($event, dataItem)"></kendo-checkbox>
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="id" title="ID"> </kendo-grid-column>
+      <kendo-grid-column field="id" title="ID" [hidden]="true"> </kendo-grid-column>
       <kendo-grid-column field="name" title="Name"> </kendo-grid-column>
       <kendo-grid-column field="description" title="Description"></kendo-grid-column>
       <kendo-grid-column field="action" title="Action">
