@@ -24,6 +24,7 @@ export class ContentComponent implements OnInit {
   public deleteSVG: SVGIcon = tableRowDeleteIcon;
 
   public tasks: Task[] = [];
+  public tasksData: Task[] = [];
 
   public taskDialogOpened = false;
   public deleteDialogOpened = false;
@@ -47,15 +48,10 @@ export class ContentComponent implements OnInit {
   public onFilter(value: Event): void {
     const inputValue = value;
 
-    this.tasks = process(this.tasks, {
+    this.tasks = process(this.tasksData, {
       filter: {
         logic: "or",
         filters: [
-          {
-            field: "id",
-            operator: "contains",
-            value: inputValue,
-          },
           {
             field: "name",
             operator: "contains",
@@ -109,11 +105,16 @@ export class ContentComponent implements OnInit {
       await this.updateTask(task);
 
       const index = this.tasks.findIndex(({ id }) => id === this.id);
+      const indexData = this.tasksData.findIndex(({ id }) => id === this.id);
 
       if (index != -1) {
         this.tasks[index].name = this.name;
         this.tasks[index].description = this.description;
         this.tasks[index].isComplete = this.isComplete;
+
+        this.tasksData[indexData].name = this.name;
+        this.tasksData[indexData].description = this.description;
+        this.tasksData[indexData].isComplete = this.isComplete;
       }
     } else {
       await this.addTask(task);
@@ -121,6 +122,7 @@ export class ContentComponent implements OnInit {
       task.id = this.id;
 
       this.tasks.push(task);
+      this.tasksData.push(task);
     }
 
     this.dataBinding.skip = 0;
@@ -141,9 +143,11 @@ export class ContentComponent implements OnInit {
     }
 
     const index = this.tasks.findIndex(({ id }) => id === this.id);
+    const indexData = this.tasksData.findIndex(({ id }) => id === this.id);
 
     if (index != -1) {
       this.tasks.splice(index, 1);
+      this.tasksData.splice(indexData, 1);
     }
 
     this.dataBinding.skip = 0;
@@ -174,6 +178,7 @@ export class ContentComponent implements OnInit {
     this.http.get<Task[]>('/task').subscribe(
       (result) => {
         this.tasks = result;
+        this.tasksData = this.tasks;
       },
       (error) => {
         console.error(error);
