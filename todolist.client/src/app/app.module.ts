@@ -12,7 +12,7 @@ import { ButtonsModule } from "@progress/kendo-angular-buttons";
 import { ContentComponent } from './content/content.component';
 
 import { FormsModule } from "@angular/forms";
-import { GridModule } from "@progress/kendo-angular-grid";
+import { GridModule, PDFModule, ExcelModule } from "@progress/kendo-angular-grid";
 import { InputsModule } from "@progress/kendo-angular-inputs";
 import { DialogsModule } from "@progress/kendo-angular-dialog";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
@@ -30,7 +30,7 @@ import { LabelModule } from "@progress/kendo-angular-label";
     BrowserModule, HttpClientModule,
     AppRoutingModule, BrowserAnimationsModule, LayoutModule, ButtonsModule,
     FormsModule, GridModule, InputsModule, DialogsModule, DropDownsModule,
-    LabelModule
+    LabelModule, PDFModule, ExcelModule
   ],
   providers: [],
   bootstrap: [AppComponent]

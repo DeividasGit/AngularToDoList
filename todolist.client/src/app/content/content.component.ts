@@ -5,7 +5,7 @@ import { RowClassArgs } from "@progress/kendo-angular-grid";
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { process } from "@progress/kendo-data-query";
 import { DataBindingDirective } from "@progress/kendo-angular-grid";
-import { SVGIcon, fileAddIcon, editToolsIcon, tableRowDeleteIcon } from "@progress/kendo-svg-icons";
+import { SVGIcon, fileAddIcon, editToolsIcon, tableRowDeleteIcon, filePdfIcon, fileExcelIcon } from "@progress/kendo-svg-icons";
 
 
 @Component({
@@ -19,9 +19,13 @@ export class ContentComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding!: DataBindingDirective;
   @Input() selectedItem!: string;
 
+  public mySelection: string[] = [];
+
   public addSVG: SVGIcon = fileAddIcon;
   public editSVG: SVGIcon = editToolsIcon;
   public deleteSVG: SVGIcon = tableRowDeleteIcon;
+  public pdfSVG: SVGIcon = filePdfIcon;
+  public excelSVG: SVGIcon = fileExcelIcon;
 
   public tasks: Task[] = [];
   public tasksData: Task[] = [];
