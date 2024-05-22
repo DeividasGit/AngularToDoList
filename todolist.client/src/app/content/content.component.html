@@ -1,15 +1,20 @@
 <div id="Tasks" *ngIf="selectedItem === 'Tasks'">
   <ul class="TasksList">
-    <kendo-grid id="my-grid" [kendoGridBinding]="tasks" [data]="tasks" [sortable]="true" [rowClass]="rowCallback"
-                [sort]="sort" [columnMenu]="{ filter: true }">
+    <kendo-grid id="my-grid" [kendoGridBinding]="tasks" kendoGridSelectBy="id" [data]="tasks" [sortable]="true" [rowClass]="rowCallback"
+                [sort]="sort" [columnMenu]="{ filter: true }" [(selectedKeys)]="mySelection" [pageSize]="20"
+                [pageable]="true" [groupable]="true" [reorderable]="true" [resizable]="true" [height]="800">
       <ng-template kendoGridToolbarTemplate>
         <kendo-textbox [style.width.px]="165"
                        placeholder="Search in all columns..."
                        (valueChange)="onFilter($event)"></kendo-textbox>
         <kendo-grid-spacer></kendo-grid-spacer>
+        <button kendoGridExcelCommand type="button" [svgIcon]="excelSVG">
+          Export to Excel
+        </button>
+        <button kendoGridPDFCommand [svgIcon]="pdfSVG">Export to PDF</button>
         <button kendoButton [svgIcon]="addSVG" (click)="add()">Add</button>
       </ng-template>
-      <kendo-grid-column field="isComplete" title="Status" filter="boolean">
+      <kendo-grid-column field="isComplete" title="Status" filter="boolean" [width]="150" [resizable]="false">
         <ng-template kendoGridCellTemplate let-dataItem>
           <kendo-checkbox #checkedState [checkedState]="dataItem.isComplete" (click)="onChange($event, dataItem)"></kendo-checkbox>
         </ng-template>

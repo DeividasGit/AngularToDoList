@@ -23,3 +23,7 @@ app-content li {
   background-color: #b2f699;
   text-decoration: line-through;
 }
+
+.k-button {
+  margin: 5px;
+}
