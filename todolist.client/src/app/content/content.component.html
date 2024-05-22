@@ -1,7 +1,7 @@
 <div id="Tasks" *ngIf="selectedItem === 'Tasks'">
   <ul class="TasksList">
     <kendo-grid id="my-grid" [kendoGridBinding]="tasks" [data]="tasks" [sortable]="true" [rowClass]="rowCallback"
-                [sort]="sort">
+                [sort]="sort" [columnMenu]="{ filter: true }">
       <ng-template kendoGridToolbarTemplate>
         <kendo-textbox [style.width.px]="165"
                        placeholder="Search in all columns..."
@@ -9,13 +9,13 @@
         <kendo-grid-spacer></kendo-grid-spacer>
         <button kendoButton [svgIcon]="addSVG" (click)="add()">Add</button>
       </ng-template>
-      <kendo-grid-column field="isComplete" title="Status">
+      <kendo-grid-column field="isComplete" title="Status" filter="boolean">
         <ng-template kendoGridCellTemplate let-dataItem>
           <kendo-checkbox #checkedState [checkedState]="dataItem.isComplete" (click)="onChange($event, dataItem)"></kendo-checkbox>
         </ng-template>
       </kendo-grid-column>
       <kendo-grid-column field="id" title="ID" [hidden]="true"> </kendo-grid-column>
-      <kendo-grid-column field="name" title="Name"> </kendo-grid-column>
+      <kendo-grid-column field="name" title="Name" filter="boolean"> </kendo-grid-column>
       <kendo-grid-column field="description" title="Description"></kendo-grid-column>
       <kendo-grid-column field="action" title="Action">
         <ng-template kendoGridCellTemplate let-dataItem>
