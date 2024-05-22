@@ -28,8 +28,8 @@
 </div>
 
 <kendo-dialog title="Add New Task"
-              *ngIf="opened"
-              (close)="save('dialog','','')"
+              *ngIf="taskDialogOpened"
+              (close)="saveTaskDialog('dialog','','')"
               [minWidth]="250"
               [width]="450">
   <kendo-label text="Task name">
@@ -39,24 +39,24 @@
     <kendo-textbox id="description" [(ngModel)]="description" placeholder="Wash dishes"></kendo-textbox>
   </kendo-label>
   <kendo-dialog-actions>
-    <button kendoButton (click)="save('cancel', name, description)">Cancel</button>
-    <button kendoButton (click)="save('save', name, description)" themeColor="primary">
+    <button kendoButton (click)="saveTaskDialog('cancel', name, description)">Cancel</button>
+    <button kendoButton (click)="saveTaskDialog('save', name, description)" themeColor="primary">
       Save
     </button>
   </kendo-dialog-actions>
 </kendo-dialog>
 
 <kendo-dialog title="Delete Task"
-              *ngIf="deleteOpened"
-              (close)="deleteAction('dialog')"
+              *ngIf="deleteDialogOpened"
+              (close)="deleteTaskDialog('dialog')"
               [minWidth]="250"
               [width]="450">
   <p style="margin: 30px; text-align: center;">
     Are you sure you want to delete this task?
   </p>
   <kendo-dialog-actions>
-    <button kendoButton (click)="deleteAction('no')">No</button>
-    <button kendoButton (click)="deleteAction('yes')" themeColor="primary">
+    <button kendoButton (click)="deleteTaskDialog('no')">No</button>
+    <button kendoButton (click)="deleteTaskDialog('yes')" themeColor="primary">
       Yes
     </button>
   </kendo-dialog-actions>

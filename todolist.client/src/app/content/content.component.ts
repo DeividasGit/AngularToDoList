@@ -25,19 +25,25 @@ export class ContentComponent implements OnInit {
 
   public tasks: Task[] = [];
 
-  public opened = false;
-  public deleteOpened = false;
+  public taskDialogOpened = false;
+  public deleteDialogOpened = false;
 
   public name: string = '';
   public description: string = '';
   public id: number = -1;
   public isComplete = false;
+
+  public sort: SortDescriptor[] = [
+    {
+      field: "isComplete",
+      dir: "asc",
+    },
+  ];
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.getTasks();
   }
-
   public onFilter(value: Event): void {
     const inputValue = value;
 
@@ -66,6 +72,103 @@ export class ContentComponent implements OnInit {
 
     this.dataBinding.skip = 0;
   }
+  public rowCallback = (context: RowClassArgs) => {
+    if (context.dataItem.isComplete == true) {
+      return { green: true };
+    } else {
+      return { green: false };
+    }
+  };
+
+  public async onChange(event: Event, task: Task) {
+    const isChecked = (<HTMLInputElement>event.target).checked;
+    console.log(isChecked);
+
+    task.isComplete = isChecked;
+
+    await this.updateTask(task);
+  }
+  public async saveTaskDialog(status: string, name: string, description: string): Promise<void> {
+    console.log(`Task Dialog result: ${status}`);
+    console.log(`Name: ${name}`);
+    console.log(`Description: ${description}`);
+
+    if (status == 'cancel') {
+      this.taskDialogOpened = false;
+      return;
+    }
+
+    let task = new Task();
+    task.name = this.name;
+    task.description = this.description;
+    task.isComplete = this.isComplete;
+
+    if (this.id != -1) {
+      task.id = this.id
+
+      await this.updateTask(task);
+
+      const index = this.tasks.findIndex(({ id }) => id === this.id);
+
+      if (index != -1) {
+        this.tasks[index].name = this.name;
+        this.tasks[index].description = this.description;
+        this.tasks[index].isComplete = this.isComplete;
+      }
+    } else {
+      await this.addTask(task);
+
+      task.id = this.id;
+
+      this.tasks.push(task);
+    }
+
+    this.dataBinding.skip = 0;
+    this.tasks = this.tasks.slice(0);
+
+    this.taskDialogOpened = false;
+
+    this.name = '';
+    this.description = '';
+    this.id = -1;
+    this.isComplete = false;
+  }
+  public async deleteTaskDialog(status: string) {
+    console.log(`Delete Dialog result: ${status}`);
+
+    if (status == 'yes') {
+      await this.deleteTask(this.id);
+    }
+
+    const index = this.tasks.findIndex(({ id }) => id === this.id);
+
+    if (index != -1) {
+      this.tasks.splice(index, 1);
+    }
+
+    this.dataBinding.skip = 0;
+    this.tasks = this.tasks.slice(0);
+
+    this.deleteDialogOpened = false;
+    this.id = -1;
+  }
+
+  public add(): void {
+    this.taskDialogOpened = true;
+  }
+  public edit(task: Task) {
+    this.name = task.name!;
+    this.description = task.description!;
+    this.id = task.id!;
+    this.isComplete = task.isComplete!;
+
+    this.taskDialogOpened = true;
+  }
+  public delete(task: Task) {
+    this.deleteDialogOpened = true;
+
+    this.id = task.id!;
+  }
 
   getTasks() {
     this.http.get<Task[]>('/task').subscribe(
@@ -77,109 +180,20 @@ export class ContentComponent implements OnInit {
       }
     );   
   }
-  updateTask(task: Task) {
-    this.http.put<Task>('/task/' + task.id, task).subscribe(
-      (error) => {
-        console.error(error);
-      }
-    );
+  async updateTask(task: Task) {
+
+    const response = await this.http.put<Task>('/task/' + task.id, task).toPromise();
   }
-  addTask(task: Task) {
-    this.http.post<Task>('/task', task).subscribe(
-      (error) => {
-        console.error(error);
-      }
-    );
+  async addTask(task: Task) {
+
+    const response = await this.http.post<Task>('/task', task).toPromise();
+
+    this.id = response!.id!;
+
+    console.log('Returned ID: ' + response!.id!);
   }
-  deleteTask(id: number) {
-    this.http.delete<Task>('/task/' + id).subscribe(
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
-
-  onChange(event: Event, task : Task) {
-    const isChecked = (<HTMLInputElement>event.target).checked;
-    console.log(isChecked);
-
-    task.isComplete = isChecked;
-
-    this.updateTask(task);
-  }
-
-  public rowCallback = (context: RowClassArgs) => {
-    if (context.dataItem.isComplete == true) {
-      return { green: true  };
-    } else {
-      return { green: false };
-    }
-  };
-   
-  public sort: SortDescriptor[] = [
-    {
-      field: "isComplete",
-      dir: "asc",
-    },
-  ];
-
-  public save(status: string, name: string, description: string): void {
-    console.log(`Dialog result: ${status}`);
-    console.log(`Name: ${name}`);
-    console.log(`Description: ${description}`);
-
-    let task = new Task()
-    task.name = this.name;
-    task.description = this.description;
-    task.isComplete = this.isComplete;
-
-    if (this.id != -1) {
-      task.id = this.id
-
-      this.updateTask(task);
-    } else {
-      this.addTask(task);
-
-      this.tasks.push(task);
-      this.dataBinding.skip = 0;
-    }
-
-    this.opened = false;
-
-    this.name = '';
-    this.description = '';
-    this.id = -1;
-    this.isComplete = false;
-  }
-
-  public add(): void {
-    this.opened = true;
-  }
-
-  public edit(task: Task) {
-    this.name = task.name!;
-    this.description = task.description!;
-    this.id = task.id!;
-    this.isComplete = task.isComplete!;
-
-    this.opened = true;
-  }
-
-  public delete(task: Task) {
-    this.deleteOpened = true;
-
-    this.id = task.id!;
-  }
-
-  public deleteAction(status: string) {
-    console.log(`Delete Dialog result: ${status}`);
-
-    if (status == 'yes') {
-      this.deleteTask(this.id);
-    }
-
-    this.deleteOpened = false;
-    this.id = -1;
+  async deleteTask(id: number) {
+    const response = await this.http.delete<Task>('/task/' + id).toPromise();
   }
 
 }
