@@ -1,0 +1,22 @@
+<div class="custom-toolbar">
+  <button kendoButton
+          [svgIcon]="menuSvg"
+          fillMode="flat"
+          (click)="drawer.toggle()"
+          float="left"></button>
+  <span class="mail-box">To Do List</span>
+</div>
+<kendo-drawer-container>
+  <kendo-drawer #drawer
+                [items]="items"
+                mode="push"
+                [mini]="true"
+                [expanded]="true"
+                (select)="onSelect($event)"
+                [autoCollapse]="false">
+  </kendo-drawer>
+
+  <kendo-drawer-content>
+    <app-content [selectedItem]="selected"></app-content>
+  </kendo-drawer-content>
+</kendo-drawer-container>
