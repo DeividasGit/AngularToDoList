@@ -11,7 +11,6 @@ namespace ToDoList.Server.Controllers {
   public async Task<ActionResult<IEnumerable<Task>>> GetTaskList() {
    return await _context.Tasks.ToListAsync();
   }
-
   [HttpGet("{id}")]
   public async Task<ActionResult<Task>> GetTask(int id) {
    var task = await _context.Tasks.FindAsync(id);
@@ -22,7 +21,6 @@ namespace ToDoList.Server.Controllers {
 
    return task;
   }
-
   [HttpPost]
   public async Task<ActionResult<Task>> PostTask(Task task) {
    _context.Tasks.Add(task);
@@ -30,7 +28,6 @@ namespace ToDoList.Server.Controllers {
 
    return CreatedAtAction("GetTask", new { id = task.Id }, task);
   }
-
   [HttpDelete("{id}")]
   public async Task<IActionResult> DeleteTask(int id) {
    var task = await _context.Tasks.FindAsync(id);
@@ -43,7 +40,6 @@ namespace ToDoList.Server.Controllers {
 
    return NoContent();
   }
-
   [HttpPut("{id}")]
   public async Task<IActionResult> PutTask(int id, Task task) {
    if (id != task.Id) {
