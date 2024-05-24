@@ -160,7 +160,7 @@ export class ContentComponent implements OnInit {
 
     if (index != -1) {
       this.tasks.splice(index, 1);
-      this.tasksData.splice(indexData, 1);
+      //this.tasksData.splice(indexData, 1);
     }
 
     this.dataBinding.skip = 0;
