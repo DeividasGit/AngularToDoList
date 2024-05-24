@@ -8,7 +8,8 @@ export class Task {
   id?: number;
   name?: string;
   description?: string;
-  isComplete?: boolean
+  isComplete?: boolean;
+  dueDate?: Date
   //Category?: {
   //  CategoryID: number;
   //  CategoryName: string;

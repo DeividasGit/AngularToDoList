@@ -17,7 +17,7 @@ import { InputsModule } from "@progress/kendo-angular-inputs";
 import { DialogsModule } from "@progress/kendo-angular-dialog";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { LabelModule } from "@progress/kendo-angular-label";
-
+import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
 
 
 @NgModule({
@@ -30,7 +30,7 @@ import { LabelModule } from "@progress/kendo-angular-label";
     BrowserModule, HttpClientModule,
     AppRoutingModule, BrowserAnimationsModule, LayoutModule, ButtonsModule,
     FormsModule, GridModule, InputsModule, DialogsModule, DropDownsModule,
-    LabelModule, PDFModule, ExcelModule
+    LabelModule, PDFModule, ExcelModule, DateInputsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

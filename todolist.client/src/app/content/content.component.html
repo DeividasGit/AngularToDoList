@@ -14,7 +14,7 @@
         <button kendoGridPDFCommand [svgIcon]="pdfSVG">Export to PDF</button>
         <button kendoButton [svgIcon]="addSVG" (click)="add()">Add</button>
       </ng-template>
-      <kendo-grid-column field="isComplete" title="Status" filter="boolean" [width]="150" [resizable]="false">
+      <kendo-grid-column field="isComplete" title="Status" filter="boolean" [width]="150" [class]="{ 'text-center': true }" [resizable]="false">
         <ng-template kendoGridCellTemplate let-dataItem>
           <kendo-checkbox #checkedState [checkedState]="dataItem.isComplete" (click)="onChange($event, dataItem)"></kendo-checkbox>
         </ng-template>
@@ -22,6 +22,11 @@
       <kendo-grid-column field="id" title="ID" [hidden]="true"> </kendo-grid-column>
       <kendo-grid-column field="name" title="Name" filter="boolean"> </kendo-grid-column>
       <kendo-grid-column field="description" title="Description"></kendo-grid-column>
+      <kendo-grid-column field="dueDate" title="Due Date" format="yyyy-MM-dd" filter="date">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.dueDate | date: 'yyyy-MM-dd'}}
+        </ng-template>
+      </kendo-grid-column>
       <kendo-grid-column field="action" title="Action">
         <ng-template kendoGridCellTemplate let-dataItem>
           <button kendoButton [svgIcon]="editSVG" (click)="edit(dataItem)">Edit</button>
@@ -34,18 +39,21 @@
 
 <kendo-dialog title="Add New Task"
               *ngIf="taskDialogOpened"
-              (close)="saveTaskDialog('dialog','','')"
+              (close)="saveTaskDialogClose('dialog')"
               [minWidth]="250"
               [width]="450">
   <kendo-label text="Task name">
-    <kendo-textbox id="name" [(ngModel)]="name" placeholder="Do chores"></kendo-textbox>
+    <kendo-textbox id="name" [(ngModel)]="taskDialogData.name" placeholder="Do chores"></kendo-textbox>
   </kendo-label>
   <kendo-label text="Description">
-    <kendo-textbox id="description" [(ngModel)]="description" placeholder="Wash dishes"></kendo-textbox>
+    <kendo-textbox id="description" [(ngModel)]="taskDialogData.description" placeholder="Wash dishes"></kendo-textbox>
+  </kendo-label>
+  <kendo-label text="Due Date">
+    <kendo-datepicker id="dueDate" [(ngModel)]="taskDialogData.dueDate" placeholder="Choose a date ..." format="yyyy-MM-dd"></kendo-datepicker>
   </kendo-label>
   <kendo-dialog-actions>
-    <button kendoButton (click)="saveTaskDialog('cancel', name, description)">Cancel</button>
-    <button kendoButton (click)="saveTaskDialog('save', name, description)" themeColor="primary">
+    <button kendoButton (click)="saveTaskDialog('cancel', taskDialogData)">Cancel</button>
+    <button kendoButton (click)="saveTaskDialog('save', taskDialogData)" themeColor="primary">
       Save
     </button>
   </kendo-dialog-actions>
